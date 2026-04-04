@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { motion, AnimatePresence, useScroll } from 'motion/react';
 import { 
   Menu, X, ChevronRight, Mail, Phone, MapPin, 
@@ -860,6 +861,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <SpeedInsights />
     </div>
   );
 }
