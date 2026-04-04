@@ -183,7 +183,7 @@ const Hero = () => {
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-          className="relative h-[500px] md:h-[650px] w-full lg:w-[90%] ml-auto rounded-[2rem] overflow-hidden bg-slate-900 border border-slate-800 group"
+          className="relative h-[500px] md:h-[650px] w-full lg:w-[90%] ml-auto rounded-[2rem] overflow-hidden bg-slate-900 border-2 border-blue-400/50 group shadow-[0_0_40px_rgba(59,130,246,0.4),inset_0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_60px_rgba(59,130,246,0.7),inset_0_0_30px_rgba(59,130,246,0.6)] hover:border-blue-400/80 transition-all duration-500"
         >
           <motion.img 
             animate={{ 
