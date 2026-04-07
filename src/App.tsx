@@ -114,9 +114,9 @@ const Hero = () => {
             initial={{ opacity: 0, filter: "blur(12px)", y: 20 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ delay: 0.5, duration: 1.2, ease: "easeOut" }}
-            className="text-5xl md:text-7xl lg:text-8xl font-name font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-slate-400 whitespace-nowrap"
+            className="text-5xl md:text-7xl lg:text-8xl font-name font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-slate-400 whitespace-nowrap pr-8 pb-4"
           >
-            Salman Farsi
+            Salman Farsi&nbsp;
           </motion.h1>
           
           <div className="mb-8 h-8">
@@ -822,7 +822,7 @@ const ContactDetailed = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-blue-200/50 mb-1">Email</h4>
-                  <p className="text-lg text-blue-50">salmanfarsisbmc31@gmail.com</p>
+                  <p className="text-lg text-blue-50">mdsalmanfarsi096@gmail.com</p>
                 </div>
               </div>
 
