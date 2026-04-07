@@ -110,9 +110,14 @@ const Hero = () => {
           >
             Hello, I am
           </motion.p>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-name font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-slate-400">
+          <motion.h1 
+            initial={{ opacity: 0, filter: "blur(12px)", y: 20 }}
+            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+            transition={{ delay: 0.5, duration: 1.2, ease: "easeOut" }}
+            className="text-5xl md:text-7xl lg:text-8xl font-name font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-slate-400 whitespace-nowrap"
+          >
             Salman Farsi
-          </h1>
+          </motion.h1>
           
           <div className="mb-8 h-8">
             <motion.p
