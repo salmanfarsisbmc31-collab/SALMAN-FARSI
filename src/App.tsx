@@ -863,7 +863,7 @@ const ContactDetailed = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-blue-200/50 mb-1">Phone</h4>
-                  <p className="text-lg text-blue-50">01406772666</p>
+                  <a href="tel:01406772666" className="text-lg text-blue-50 hover:text-blue-300 transition-colors block">01406772666</a>
                 </div>
               </div>
               
@@ -873,7 +873,7 @@ const ContactDetailed = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-blue-200/50 mb-1">Email</h4>
-                  <p className="text-lg text-blue-50">mdsalmanfarsi096@gmail.com</p>
+                  <a href="mailto:mdsalmanfarsi096@gmail.com" className="text-lg text-blue-50 hover:text-blue-300 transition-colors block">mdsalmanfarsi096@gmail.com</a>
                 </div>
               </div>
 
