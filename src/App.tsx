@@ -5,7 +5,8 @@ import { motion, AnimatePresence, useScroll } from 'motion/react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { 
   Menu, X, ChevronRight, Mail, Phone, MapPin, 
-  MonitorPlay, Layers, Send, ArrowRight, CheckCircle2
+  Video, PenTool, MonitorPlay, Layers, Send, ArrowRight, CheckCircle2,
+  Instagram, Linkedin, Facebook, Youtube
 } from 'lucide-react';
 
 // --- Navbar ---
@@ -110,9 +111,14 @@ const Hero = () => {
           >
             Hello, I am
           </motion.p>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-slate-400">
-            Salman Farsi
-          </h1>
+          <motion.h1 
+            initial={{ opacity: 0, filter: "blur(12px)", y: 20 }}
+            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+            transition={{ delay: 0.5, duration: 1.2, ease: "easeOut" }}
+            className="text-5xl md:text-7xl lg:text-8xl font-name font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-slate-400 pr-8 pb-4 leading-tight"
+          >
+            Salman<br />Farsi
+          </motion.h1>
           
           <div className="mb-8 h-8">
             <motion.p
@@ -174,6 +180,14 @@ const Hero = () => {
 
 // --- Showreel ---
 const Showreel = () => {
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (activeVideo) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'unset';
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [activeVideo]);
+
   return (
     <section className="py-24 bg-slate-950 relative overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-900/20 blur-[120px] rounded-full pointer-events-none"></div>
@@ -194,19 +208,61 @@ const Showreel = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative aspect-video w-full max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(30,58,138,0.4)] border border-blue-900/50 group"
+          onClick={() => setActiveVideo("https://www.youtube.com/embed/ZA2RqM9G-DA?autoplay=1")}
+          className="relative aspect-video w-full max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(30,58,138,0.4)] border border-blue-900/50 group cursor-pointer bg-[#0a0a0a]"
         >
-          <iframe 
-            src="https://www.youtube.com/embed/XKuSBwOmXrg?autoplay=0&mute=0&loop=1&controls=1&showinfo=0&rel=0&modestbranding=1" 
-            title="Showreel" 
-            frameBorder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowFullScreen
+          <img 
+            src="https://img.youtube.com/vi/ZA2RqM9G-DA/maxresdefault.jpg" 
+            alt="Showreel" 
+            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-60 group-hover:opacity-100"
+            referrerPolicy="no-referrer"
             loading="lazy"
-            className="absolute inset-0 w-full h-full"
-          ></iframe>
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-40 pointer-events-none"></div>
+          
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm bg-black/20">
+              <MonitorPlay className="w-8 h-8 text-white ml-1" strokeWidth={1} />
+            </div>
+          </div>
+
+          <div className="absolute bottom-0 left-0 p-8 w-full pointer-events-none transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+            <span className="text-xs font-medium tracking-[0.2em] uppercase text-slate-400 mb-2 block">Featured</span>
+            <h3 className="text-2xl font-light text-white tracking-wide">Showreel</h3>
+          </div>
         </motion.div>
       </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {activeVideo && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
+          >
+            <button 
+              onClick={() => setActiveVideo(null)}
+              className="absolute top-6 right-6 w-12 h-12 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center text-white transition-colors border border-white/10"
+            >
+              <X size={24} strokeWidth={1.5} />
+            </button>
+
+            <div className="w-full max-w-6xl aspect-video bg-black rounded-lg overflow-hidden border border-white/10 shadow-2xl">
+              <iframe 
+                src={activeVideo} 
+                title="YouTube video player" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
@@ -236,10 +292,10 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
     },
     { 
       id: 3, 
-      title: "Motion Video", 
+      title: "Motion Ads", 
       category: "Reels", 
-      image: "https://img.youtube.com/vi/_uE-wUUqjwQ/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/_uE-wUUqjwQ?autoplay=1",
+      image: "https://img.youtube.com/vi/LM8y_XWsgMU/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/LM8y_XWsgMU?autoplay=1",
       isVertical: true,
       span: "md:col-span-1"
     },
@@ -322,8 +378,8 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
         <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0">
             <img 
-              src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=3870&auto=format&fit=crop" 
-              alt="Cinematic Background" 
+              src="https://img.youtube.com/vi/ZA2RqM9G-DA/maxresdefault.jpg" 
+              alt="Showreel Background" 
               className="w-full h-full object-cover opacity-50"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-[#050505]"></div>
@@ -334,7 +390,7 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
               Showreel
             </h1>
             <button 
-              onClick={() => setActiveVideo("https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1")}
+              onClick={() => setActiveVideo("https://www.youtube.com/embed/ZA2RqM9G-DA?autoplay=1")}
               className="group relative flex items-center justify-center w-24 h-24 rounded-full border border-white/20 hover:border-white/60 transition-all duration-700 bg-black/10 backdrop-blur-sm"
             >
               <MonitorPlay className="w-8 h-8 text-white ml-2 opacity-70 group-hover:opacity-100 transition-opacity duration-500" strokeWidth={1} />
@@ -390,7 +446,7 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
 
                 <div className="absolute bottom-0 left-0 p-6 w-full pointer-events-none transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                   <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-slate-400 mb-2 block">{project.category}</span>
-                  <h3 className="text-xl font-light text-white tracking-wide">{project.title}</h3>
+                  <h3 className="text-xl font-bold text-white tracking-wide">{project.title}</h3>
                 </div>
               </motion.div>
             ))}
@@ -661,6 +717,27 @@ const OrbitingNode = ({ radius, initialAngle, duration, reverse, color, text }: 
   );
 };
 
+// --- About Preview (For Home Page) ---
+const AboutPreview = () => (
+  <section className="py-24 bg-slate-900/20 relative overflow-hidden">
+    <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center gap-12">
+      <div className="w-full md:w-1/2">
+        <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto flex items-center justify-center">
+          <div className="absolute inset-0 bg-blue-500/20 blur-[60px] rounded-full pointer-events-none"></div>
+          <img src="https://i.ibb.co/BVKfjpgQ/salman.jpg" alt="Salman Farsi" className="relative z-10 w-full h-full object-cover rounded-full border-4 border-blue-500/30 shadow-2xl" referrerPolicy="no-referrer" />
+        </div>
+      </div>
+      <div className="w-full md:w-1/2 text-center md:text-left">
+        <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white">About Me</h2>
+        <p className="text-blue-100/80 text-lg mb-8">I'm a passionate and dedicated aspiring graphic designer and media editor. I'm always learning new things to improve my skills. Even though I'm still early in my journey, I've built a strong foundation in tools like Adobe Premiere Pro and After Effects...</p>
+        <Link to="/about" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-medium transition-all">
+          Read Full Story <ArrowRight size={18} />
+        </Link>
+      </div>
+    </div>
+  </section>
+);
+
 // --- About Detailed (For About Page) ---
 const AboutDetailed = () => {
   const containerRef = useRef(null);
@@ -750,17 +827,21 @@ const AboutDetailed = () => {
   );
 };
 
+// --- Contact Preview (For Home Page) ---
+const ContactPreview = () => (
+  <section className="py-24 bg-blue-900/20 relative overflow-hidden text-center border-t border-blue-900/30">
+    <div className="max-w-3xl mx-auto px-6 relative z-10">
+      <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white">Let's Work Together</h2>
+      <p className="text-blue-200/70 text-lg mb-8">Have a project in mind? I'd love to hear about it. Let's discuss how we can bring your ideas to life.</p>
+      <Link to="/contact" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)]">
+        Contact Me Now <Send size={20} />
+      </Link>
+    </div>
+  </section>
+);
+
 // --- Contact Detailed (For Contact Page) ---
 const ContactDetailed = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const subject = encodeURIComponent(formData.subject || 'Project Inquiry');
-    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
-    window.location.href = `mailto:mdsalmanfarsi096@gmail.com?subject=${subject}&body=${body}`;
-  };
-
   return (
     <section className="py-24 bg-slate-950 pt-32 min-h-screen">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -814,18 +895,30 @@ const ContactDetailed = () => {
             transition={{ duration: 0.6 }}
             className="bg-blue-950/40 backdrop-blur-md border border-blue-800/50 p-8 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
           >
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form 
+              className="space-y-6" 
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const name = formData.get('name');
+                const email = formData.get('email');
+                const subject = formData.get('subject');
+                const message = formData.get('message');
+                
+                const mailtoLink = `mailto:mdsalmanfarsi096@gmail.com?subject=${encodeURIComponent(subject as string || 'New message from website')}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+                window.location.href = mailtoLink;
+              }}
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium text-blue-200/70">Name</label>
                   <input 
                     type="text" 
                     id="name" 
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    name="name"
+                    required
                     className="w-full bg-blue-950/50 border border-blue-800/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder="John Doe"
-                    required
                   />
                 </div>
                 <div className="space-y-2">
@@ -833,11 +926,10 @@ const ContactDetailed = () => {
                   <input 
                     type="email" 
                     id="email" 
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    name="email"
+                    required
                     className="w-full bg-blue-950/50 border border-blue-800/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder="john@example.com"
-                    required
                   />
                 </div>
               </div>
@@ -846,23 +938,21 @@ const ContactDetailed = () => {
                 <input 
                   type="text" 
                   id="subject" 
-                  value={formData.subject}
-                  onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                  name="subject"
+                  required
                   className="w-full bg-blue-950/50 border border-blue-800/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                   placeholder="Project Inquiry"
-                  required
                 />
               </div>
               <div className="space-y-2">
                 <label htmlFor="message" className="text-sm font-medium text-blue-200/70">Message</label>
                 <textarea 
                   id="message" 
+                  name="message"
+                  required
                   rows={5}
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
                   className="w-full bg-blue-950/50 border border-blue-800/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none"
                   placeholder="Tell me about your project..."
-                  required
                 ></textarea>
               </div>
               <button 
@@ -956,18 +1046,37 @@ const Pricing = () => {
   );
 };
 
+// --- Behance Icon ---
+const BehanceIcon = ({ size = 24, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M8.22 17.54h-5.6v-11.2h5.79c1.66 0 2.82.32 3.48.96.66.64.99 1.46.99 2.46 0 1.14-.52 1.99-1.55 2.54 1.25.32 2.08 1.16 2.08 2.52 0 1.08-.38 1.95-1.14 2.61-.76.66-1.97.99-3.63.99zm-2.4-4.88h2.37c.72 0 1.25-.15 1.59-.45.34-.3.51-.71.51-1.23 0-.52-.16-.92-.48-1.2-.32-.28-.84-.42-1.56-.42h-2.43v3.3zm0 2.58v3.42h2.61c.88 0 1.5-.16 1.86-.48.36-.32.54-.78.54-1.38 0-.62-.2-1.1-.6-1.44-.4-.34-1.08-.51-2.04-.51h-2.37zm11.22-3.78v.9h4.68c-.06.84-.36 1.51-.9 2.01-.54.5-1.28.75-2.22.75-1.02 0-1.8-.3-2.34-.9-.54-.6-.81-1.46-.81-2.58 0-1.18.28-2.08.84-2.7.56-.62 1.34-.93 2.34-.93.96 0 1.72.29 2.28.87.56.58.85 1.38.87 2.4h-4.74zm2.34-1.35c-.48 0-.86.16-1.14.48-.28.32-.45.75-.51 1.29h3.24c-.04-.54-.2-1-.48-1.32-.28-.32-.65-.48-1.11-.48zm-2.46-4.11h4.8v1.2h-4.8v-1.2z"/>
+  </svg>
+);
+
 // --- Footer ---
 const Footer = () => {
   return (
     <footer className="py-8 border-t border-blue-900/50 bg-blue-950 text-center">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="text-blue-200/60 text-sm">
-          © {new Date().getFullYear()} Salman Farsi. All rights reserved.
+          © {new Date().getFullYear()} Salman. All rights reserved.
         </p>
         <div className="flex space-x-6">
-          <a href="https://www.behance.net/salmanfarsi62" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors">Behance</a>
-          <a href="https://www.instagram.com/salmanfarsi096?igsh=c29mc3ppNXV6NG42" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors">Instagram</a>
-          <a href="https://www.linkedin.com/in/salmanfarsi096" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors">LinkedIn</a>
+          <a href="https://www.behance.net/salmanfarsi62" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors" aria-label="Behance">
+            <BehanceIcon size={20} />
+          </a>
+          <a href="https://www.instagram.com/salmanfarsi096?igsh=c29mc3ppNXV6NG42" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors" aria-label="Instagram">
+            <Instagram size={20} />
+          </a>
+          <a href="https://www.linkedin.com/in/salmanfarsi096" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors" aria-label="LinkedIn">
+            <Linkedin size={20} />
+          </a>
+          <a href="https://www.facebook.com/hm.salman.farsi.690942" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors" aria-label="Facebook">
+            <Facebook size={20} />
+          </a>
+          <a href="https://youtube.com/@salmanfarsi287" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors" aria-label="YouTube">
+            <Youtube size={20} />
+          </a>
         </div>
       </div>
     </footer>
