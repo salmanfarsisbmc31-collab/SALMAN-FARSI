@@ -270,6 +270,7 @@ const Showreel = () => {
 // --- VideoPortfolio ---
 const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [activeVideoFolder, setActiveVideoFolder] = useState<any | null>(null);
 
   const allProjects = [
     { 
@@ -310,12 +311,15 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
     },
     { 
       id: 5, 
-      title: "Commercials", 
-      category: "Automotive", 
-      image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=3870&auto=format&fit=crop",
-      videoUrl: "https://www.youtube.com/embed/jBCr-aJN618?autoplay=1",
+      title: "Green Screen Video", 
+      category: "Folder", 
+      image: "https://img.youtube.com/vi/kOX-2hZdifc/maxresdefault.jpg",
       isVertical: false,
-      span: "md:col-span-1"
+      span: "md:col-span-1",
+      videoUrls: [
+        { id: "kOX-2hZdifc", url: "https://www.youtube.com/embed/kOX-2hZdifc?autoplay=1", image: "https://img.youtube.com/vi/kOX-2hZdifc/maxresdefault.jpg" },
+        { id: "1YDtNdKzfwU", url: "https://www.youtube.com/embed/1YDtNdKzfwU?autoplay=1", image: "https://img.youtube.com/vi/1YDtNdKzfwU/maxresdefault.jpg" }
+      ]
     },
     { 
       id: 6, 
@@ -367,10 +371,10 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
   const projects = preview ? allProjects.slice(0, 4) : allProjects;
 
   useEffect(() => {
-    if (activeVideo) document.body.style.overflow = 'hidden';
+    if (activeVideo || activeVideoFolder) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = 'unset';
     return () => { document.body.style.overflow = 'unset'; };
-  }, [activeVideo]);
+  }, [activeVideo, activeVideoFolder]);
 
   return (
     <div className="bg-[#050505] min-h-screen font-sans">
@@ -426,7 +430,13 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: index * 0.1, ease: "easeOut" }}
-                onClick={() => project.videoUrl ? setActiveVideo(project.videoUrl) : null}
+                onClick={() => {
+                  if (project.videoUrls) {
+                    setActiveVideoFolder(project);
+                  } else if (project.videoUrl) {
+                    setActiveVideo(project.videoUrl);
+                  }
+                }}
                 className={`group relative overflow-hidden bg-[#0a0a0a] cursor-pointer ${project.span || ''} ${project.isVertical ? 'aspect-[9/16] w-full max-w-[320px] mx-auto' : 'aspect-video w-full'}`}
               >
                 <img 
@@ -440,12 +450,18 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
                 
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
                   <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm bg-black/20">
-                    <MonitorPlay className="w-6 h-6 text-white ml-1" strokeWidth={1} />
+                    {project.videoUrls ? (
+                      <Layers className="w-6 h-6 text-white" strokeWidth={1.5} />
+                    ) : (
+                      <MonitorPlay className="w-6 h-6 text-white ml-1" strokeWidth={1} />
+                    )}
                   </div>
                 </div>
 
                 <div className="absolute bottom-0 left-0 p-6 w-full pointer-events-none transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-slate-400 mb-2 block">{project.category}</span>
+                  <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-slate-400 mb-2 block">
+                    {project.category} {project.videoUrls && `• ${project.videoUrls.length} Videos`}
+                  </span>
                   <h3 className="text-xl font-bold text-white tracking-wide">{project.title}</h3>
                 </div>
               </motion.div>
@@ -454,6 +470,58 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
         </div>
       </section>
 
+      {/* Modal for Video Folder */}
+      <AnimatePresence>
+        {activeVideoFolder && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-12"
+          >
+            <button 
+              onClick={() => setActiveVideoFolder(null)}
+              className="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors z-50"
+            >
+              <X size={24} />
+            </button>
+
+            <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-950 border border-slate-800 p-6 md:p-10 hide-scrollbar">
+              <div className="mb-10 text-center">
+                <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">{activeVideoFolder.title}</h3>
+                <p className="text-slate-400">{activeVideoFolder.videoUrls.length} videos in this folder</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {activeVideoFolder.videoUrls.map((vid: any, idx: number) => (
+                  <motion.div 
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    onClick={() => setActiveVideo(vid.url)}
+                    className="rounded-xl overflow-hidden bg-slate-900 aspect-video relative group cursor-pointer"
+                  >
+                    <img 
+                      src={vid.image} 
+                      alt={`${activeVideoFolder.title} ${idx + 1}`} 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-70 group-hover:opacity-100"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-40 pointer-events-none"></div>
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                      <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm bg-black/20">
+                        <MonitorPlay className="w-6 h-6 text-white ml-1" strokeWidth={1} />
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Video Modal */}
       <AnimatePresence>
         {activeVideo && (
@@ -461,7 +529,7 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
+            className="fixed inset-0 z-[110] flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
           >
             <button 
               onClick={() => setActiveVideo(null)}
@@ -500,6 +568,7 @@ type FolderType = {
 
 const DesignPortfolio = ({ preview = false }: { preview?: boolean }) => {
   const [activeFolder, setActiveFolder] = useState<FolderType | null>(null);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
 
   const allFolders: FolderType[] = [
     { 
@@ -586,10 +655,10 @@ const DesignPortfolio = ({ preview = false }: { preview?: boolean }) => {
   const folders = allFolders;
 
   useEffect(() => {
-    if (activeFolder) document.body.style.overflow = 'hidden';
+    if (activeFolder || activeImage) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = 'unset';
     return () => { document.body.style.overflow = 'unset'; };
-  }, [activeFolder]);
+  }, [activeFolder, activeImage]);
 
   return (
     <section className={`py-24 ${preview ? 'bg-slate-950' : 'bg-slate-950 pt-32 min-h-screen'}`}>
@@ -667,7 +736,8 @@ const DesignPortfolio = ({ preview = false }: { preview?: boolean }) => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1 }}
-                    className="rounded-xl overflow-hidden bg-slate-900 aspect-[4/5] relative group"
+                    onClick={() => setActiveImage(img)}
+                    className="rounded-xl overflow-hidden bg-slate-900 aspect-[4/5] relative group cursor-pointer"
                   >
                     <img 
                       src={img} 
@@ -679,6 +749,38 @@ const DesignPortfolio = ({ preview = false }: { preview?: boolean }) => {
                 ))}
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal for Full Screen Image */}
+      <AnimatePresence>
+        {activeImage && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[110] flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
+            onClick={() => setActiveImage(null)}
+          >
+            <button 
+              onClick={() => setActiveImage(null)}
+              className="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors z-50"
+            >
+              <X size={24} />
+            </button>
+
+            <motion.img 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              src={activeImage} 
+              alt="Full view" 
+              className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+              referrerPolicy="no-referrer"
+              onClick={(e) => e.stopPropagation()}
+            />
           </motion.div>
         )}
       </AnimatePresence>
