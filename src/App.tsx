@@ -1164,7 +1164,7 @@ const Footer = () => {
           © {new Date().getFullYear()} Salman. All rights reserved.
         </p>
         <div className="flex space-x-6">
-          <a href="https://www.behance.net/salmanfarsi62" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors" aria-label="Behance">
+          <a href="https://www.behance.net/salmanfarsi287" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors" aria-label="Behance">
             <BehanceIcon size={20} />
           </a>
           <a href="https://www.instagram.com/salmanfarsi096?igsh=c29mc3ppNXV6NG42" target="_blank" rel="noopener noreferrer" className="text-blue-200/60 hover:text-white transition-colors" aria-label="Instagram">
