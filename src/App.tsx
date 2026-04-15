@@ -350,19 +350,19 @@ const VideoPortfolio = ({ preview = false }: { preview?: boolean }) => {
     },
     { 
       id: 9, 
-      title: "Brand Anthem", 
+      title: "Promotional Ad", 
       category: "Corporate", 
-      image: "https://images.unsplash.com/photo-1578022761797-b8636ac1773c?q=80&w=3870&auto=format&fit=crop",
-      videoUrl: "https://www.youtube.com/embed/jBCr-aJN618?autoplay=1",
+      image: "https://img.youtube.com/vi/d9FZObEMh1s/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/d9FZObEMh1s?autoplay=1",
       isVertical: false,
       span: "md:col-span-1"
     },
     { 
       id: 10, 
-      title: "VFX Breakdown", 
+      title: "Storytelling", 
       category: "Post Production", 
-      image: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=3870&auto=format&fit=crop",
-      videoUrl: "https://www.youtube.com/embed/XKuSBwOmXrg?autoplay=1",
+      image: "https://img.youtube.com/vi/GBvMADSC29A/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/GBvMADSC29A?autoplay=1",
       isVertical: false,
       span: "md:col-span-1"
     }
